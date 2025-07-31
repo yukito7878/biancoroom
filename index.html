@@ -70,12 +70,16 @@
 		/* Page Management */
 		.page {
 			display: none;
+			opacity: 0;
+			transition: opacity 0.5s ease;
 			min-height: 100vh;
 			padding-top: 80px;
+			position: relative;
 		}
 
 		.page.active {
 			display: block;
+			opacity: 1;
 		}
 
 		/* Hero Section */
@@ -166,7 +170,7 @@
 		}
 
 		.company-item {
-			background: #f8f9fa;
+			background: #f1f1f1;
 			padding: 1.5rem;
 			border-radius: 8px;
 			border-left: 4px solid #2c3e50;
@@ -186,7 +190,7 @@
 		}
 
 		.strength-card {
-			background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+			background: linear-gradient(135deg, #f8f9fa, #e3e3e3);
 			padding: 2rem 1rem;
 			border-radius: 10px;
 			text-align: center;
@@ -378,8 +382,8 @@
 			border-radius: 30px;
 			margin-bottom: 10%;
 		}
-		
-		.strength-card_img{
+
+		.strength-card_img {
 			border-radius: 10px;
 		}
 
@@ -539,9 +543,9 @@
 			<!-- 会社の強み -->
 			<section class="content-section">
 				<h2 class="section-title">会社の強み</h2>
-<!--				<div class="image-placeholder">-->
-<!--					<img src="img/company_strength.png">-->
-<!--				</div>-->
+				<!--				<div class="image-placeholder">-->
+				<!--					<img src="img/company_strength.png">-->
+				<!--				</div>-->
 				<div class="strengths-grid">
 					<div class="strength-card">
 						<img src="img/onestop_order.png" class="strength-card_img">
@@ -806,17 +810,44 @@
 	<script>
 		// ページ切り替え機能
 		function showPage(pageId) {
-			// すべてのページを非表示
-			document.querySelectorAll('.page').forEach(page => {
-				page.classList.remove('active');
-			});
+			const pages = document.querySelectorAll('.page');
+			const targetPage = document.getElementById(pageId);
+			const currentPage = document.querySelector('.page.active');
 
-			// 指定されたページを表示
-			document.getElementById(pageId).classList.add('active');
+			// フェードアウト（現在表示中のページ）
+			if (currentPage && currentPage !== targetPage) {
+				currentPage.style.opacity = 0;
 
-			// ページトップにスクロール
-			window.scrollTo(0, 0);
+				// 完全に消えたあとに display: none & active 削除
+				setTimeout(() => {
+					currentPage.style.display = 'none';
+					currentPage.classList.remove('active');
+
+					// フェードイン（新しいページ）
+					fadeInPage(targetPage);
+				}, 500); // CSSと合わせて0.5s
+			} else {
+				// 初回表示や同じページを再表示する時
+				fadeInPage(targetPage);
+			}
 		}
+
+		function fadeInPage(page) {
+			page.style.display = 'block'; // 表示
+			page.scrollTo?.(0, 0); // セクションがスクロール要素の時はここでリセット
+
+			// 一瞬待ってから opacity を 1 に（アニメ発火）
+			setTimeout(() => {
+				page.classList.add('active');
+				page.style.opacity = 1;
+				window.scrollTo(0, 0); // ページ自体をトップに戻す
+			}, 10);
+		}
+
+		document.addEventListener('DOMContentLoaded', () => {
+			showPage('home'); // 初期表示
+		});
+
 
 		// フォーム送信処理（複数のサービス対応）
 		document.addEventListener('DOMContentLoaded', function () {
