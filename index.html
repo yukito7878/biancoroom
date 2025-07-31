@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>合同会社 BiancoRoom - 映像で、伝える力を最大化。</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+			line-height: 1.6;
+			color: #333;
+			background-color: #f8f9fa;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 10px;
+		}
+
+		/* Header */
+		header {
+			background: #fff;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			position: fixed;
+			top: 0;
+			width: 100%;
+			z-index: 1000;
+		}
+
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1rem 0;
+		}
+
+		.logo {
+			font-size: 2rem;
+			font-weight: bold;
+			color: #2c3e50;
+			text-decoration: none;
+		}
+
+		.nav-links {
+			display: flex;
+			list-style: none;
+			gap: 2rem;
+		}
+
+		.nav-links a {
+			text-decoration: none;
+			color: #333;
+			font-weight: 500;
+			transition: color 0.3s;
+			cursor: pointer;
+		}
+
+		.nav-links a:hover {
+			color: #2c3e50;
+		}
+
+		/* Page Management */
+		.page {
+			display: none;
+			min-height: 100vh;
+			padding-top: 80px;
+		}
+
+		.page.active {
+			display: block;
+		}
+
+		/* Hero Section */
+		.hero {
+			background: url("img/top.png") center center / cover no-repeat;
+			color: white;
+			padding: 120px 0;
+			text-align: center;
+			position: relative;
+			overflow: hidden;
+		}
+
+		/* オーバーレイで読みやすさUP */
+		.hero::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.4);
+			/* 調整可 */
+			z-index: 0;
+		}
+
+		.hero-content {
+			position: relative;
+			z-index: 1;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 0 1rem;
+		}
+
+		.catchphrase {
+			font-size: 3rem;
+			font-weight: bold;
+			margin-bottom: 1rem;
+			color: #fff;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+		}
+
+		.hero-subtitle {
+			font-size: 1.3rem;
+			opacity: 0.95;
+			margin-bottom: 2rem;
+			color: #f1f1f1;
+		}
+
+		/* 不要になった main-visual は消してOK */
+		.main-visual {
+			display: none;
+		}
+
+		/* Content Sections */
+		.content-section {
+			background: white;
+			margin: 2rem 0;
+			padding: 3rem 2rem;
+			border-radius: 10px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		.section-title {
+			font-size: 2.2rem;
+			color: #2c3e50;
+			margin-bottom: 2rem;
+			text-align: center;
+			position: relative;
+		}
+
+		.section-title::after {
+			content: '';
+			position: absolute;
+			bottom: -10px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 60px;
+			height: 3px;
+			background: #2c3e50;
+		}
+
+		/* Company Overview */
+		.company-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 2rem;
+			margin-top: 2rem;
+		}
+
+		.company-item {
+			background: #f8f9fa;
+			padding: 1.5rem;
+			border-radius: 8px;
+			border-left: 4px solid #2c3e50;
+		}
+
+		.company-item h3 {
+			color: #2c3e50;
+			margin-bottom: 0.5rem;
+		}
+
+		/* Strengths Section */
+		.strengths-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 2rem;
+			margin-top: 2rem;
+		}
+
+		.strength-card {
+			background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+			padding: 2rem 1rem;
+			border-radius: 10px;
+			text-align: center;
+			transition: transform 0.3s;
+			border: 1px solid #dee2e6;
+		}
+
+		.strength-card:hover {
+			transform: translateY(-5px);
+		}
+
+		.strength-icon {
+			font-size: 3rem;
+			margin-bottom: 1rem;
+			display: block;
+		}
+
+		.strength-card h3 {
+			color: #2c3e50;
+			margin-bottom: 1rem;
+		}
+
+		/* Service Cards */
+		.service-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+			gap: 2rem;
+			margin-top: 2rem;
+		}
+
+		.service-card {
+			background: white;
+			border: 1px solid #dee2e6;
+			border-radius: 10px;
+			overflow: hidden;
+			transition: transform 0.3s, box-shadow 0.3s;
+		}
+
+		.service-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+		}
+
+		.service-header {
+			background: #2c3e50;
+			color: white;
+			padding: 1.5rem;
+			text-align: center;
+		}
+
+		.service-price {
+			font-size: 1.8rem;
+			font-weight: bold;
+			margin-bottom: 0.5rem;
+		}
+
+		.service-content {
+			padding: 2rem;
+		}
+
+		.service-features {
+			list-style: none;
+			margin-bottom: 1.5rem;
+		}
+
+		.service-features li {
+			padding: 0.3rem 0;
+			border-bottom: 1px solid #f1f1f1;
+		}
+
+		.service-features li:before {
+			content: "✓ ";
+			color: #28a745;
+			font-weight: bold;
+		}
+
+		.options-title {
+			font-size: 1.1rem;
+			font-weight: bold;
+			color: #2c3e50;
+			margin: 1.5rem 0 1rem 0;
+		}
+
+		.option-item {
+			display: flex;
+			justify-content: space-between;
+			padding: 0.5rem 0;
+			border-bottom: 1px solid #f1f1f1;
+			font-size: 0.9rem;
+		}
+
+		/* Contact Form */
+		.form-group {
+			margin-bottom: 1.5rem;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 0.5rem;
+			font-weight: bold;
+			color: #2c3e50;
+		}
+
+		.form-group input,
+		.form-group textarea {
+			width: 100%;
+			padding: 0.8rem;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			font-size: 1rem;
+		}
+
+		.form-group textarea {
+			height: 120px;
+			resize: vertical;
+		}
+
+		.required {
+			color: #dc3545;
+		}
+
+		.submit-btn {
+			background: #2c3e50;
+			color: white;
+			padding: 1rem 2rem;
+			border: none;
+			border-radius: 5px;
+			font-size: 1rem;
+			cursor: pointer;
+			transition: background 0.3s;
+		}
+
+		.submit-btn:hover {
+			background: #34495e;
+		}
+
+		.contact-info {
+			background: #f8f9fa;
+			padding: 2rem;
+			border-radius: 10px;
+			margin-top: 2rem;
+		}
+
+		.contact-item {
+			margin-bottom: 1rem;
+		}
+
+		.contact-item strong {
+			color: #2c3e50;
+		}
+
+		/* News Section */
+		.news-item {
+			padding: 1rem;
+			border-bottom: 1px solid #eee;
+			display: flex;
+			gap: 1rem;
+		}
+
+		.news-date {
+			color: #666;
+			font-size: 0.9rem;
+			min-width: 100px;
+		}
+
+		/* Image Placeholder */
+		.image-placeholder {
+			width: 100%;
+			background: #f8f9fa;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 1rem 0;
+		}
+
+		/* Footer */
+		footer {
+			background: #2c3e50;
+			color: white;
+			text-align: center;
+			padding: 2rem 0;
+			margin-top: 3rem;
+		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+			display: block;
+			border-radius: 30px;
+			margin-bottom: 10%;
+		}
+		
+		.strength-card_img{
+			border-radius: 10px;
+		}
+
+
+		/* === レスポンシブ強化 === */
+		@media (max-width: 1024px) {
+			nav {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.nav-links {
+				flex-wrap: wrap;
+				gap: 1rem;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.nav-links {
+				gap: 1rem;
+			}
+
+			.catchphrase {
+				font-size: 2rem;
+			}
+
+			.hero-subtitle {
+				font-size: 1.1rem;
+			}
+
+			.content-section {
+				padding: 2rem 1rem;
+			}
+
+			.service-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.hero {
+				padding: 60px 1rem;
+			}
+
+			.catchphrase {
+				font-size: 1.8rem;
+			}
+
+			.hero-subtitle {
+				font-size: 1rem;
+			}
+
+			.main-visual {
+				height: auto;
+			}
+
+			.main-visual img {
+				width: 100%;
+				height: auto;
+				object-fit: cover;
+				border-radius: 10px;
+			}
+
+			.image-placeholder img {
+				width: 100%;
+				height: auto;
+				object-fit: contain;
+				border-radius: 8px;
+			}
+
+			.strengths-grid,
+			.service-grid,
+			.company-grid {
+				grid-template-columns: 1fr;
+			}
+
+			/* フォームと連絡先を縦並びに */
+			#contact .content-section>div {
+				grid-template-columns: 1fr !important;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.logo {
+				font-size: 1.5rem;
+			}
+
+			.section-title {
+				font-size: 1.5rem;
+			}
+
+			.service-price {
+				font-size: 1.4rem;
+			}
+
+			.submit-btn {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<nav class="container">
+			<a href="#" class="logo" onclick="showPage('home')">BiancoRoom</a>
+			<ul class="nav-links">
+				<li><a onclick="showPage('home')">トップ</a></li>
+				<li><a onclick="showPage('services')">サービス紹介</a></li>
+				<li><a onclick="showPage('contact')">お問い合わせ</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<!-- トップページ -->
+	<div id="home" class="page active">
+		<section class="hero">
+			<div class="container">
+				<div class="hero-content">
+					<h1 class="catchphrase">映像で、伝える力を最大化。</h1>
+					<p class="hero-subtitle">企画から納品まで、映像制作のプロフェッショナルがワンストップでサポート</p>
+				</div>
+			</div>
+		</section>
+
+
+		<div class="container">
+			<!-- 会社概要 -->
+			<section class="content-section">
+				<h2 class="section-title">会社概要</h2>
+				<div class="company-grid">
+					<div class="company-item">
+						<h3>会社名</h3>
+						<p>合同会社 BiancoRoom</p>
+					</div>
+					<div class="company-item">
+						<h3>代表者</h3>
+						<p>山石 美穂</p>
+					</div>
+					<div class="company-item">
+						<h3>所在地</h3>
+						<p>〒838-0106<br>福岡県小郡市三沢62-3<br>こうらハイツ103</p>
+					</div>
+					<div class="company-item">
+						<h3>電話番号</h3>
+						<p>090-5946-6139</p>
+					</div>
+					<div class="company-item">
+						<h3>事業内容</h3>
+						<p>映像制作を通じた企業・個人の表現支援および販促活動の推進</p>
+					</div>
+					<div class="company-item">
+						<h3>資本金</h3>
+						<p>100万円</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- 会社の強み -->
+			<section class="content-section">
+				<h2 class="section-title">会社の強み</h2>
+<!--				<div class="image-placeholder">-->
+<!--					<img src="img/company_strength.png">-->
+<!--				</div>-->
+				<div class="strengths-grid">
+					<div class="strength-card">
+						<img src="img/onestop_order.png" class="strength-card_img">
+						<h3>企画から納品までワンストップ</h3>
+						<p>構想・撮影・編集・納品まで、すべての工程を一貫してサポート。お客様の手間を最小限に抑えます。</p>
+					</div>
+					<div class="strength-card">
+						<img src="img/team_videoEditor.png" class="strength-card_img">
+						<h3>映像表現に強いスタッフ構成</h3>
+						<p>クリエイティブな発想と確かな技術力を持つスタッフが、お客様のビジョンを映像で実現します。</p>
+					</div>
+					<div class="strength-card">
+						<img src="img/flexible_budget.png" class="strength-card_img">
+						<h3>柔軟な予算対応</h3>
+						<p>大企業から個人事業主まで、予算に応じた最適なプランをご提案。コストパフォーマンスを重視します。</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- お知らせ -->
+			<section class="content-section">
+				<h2 class="section-title">お知らせ</h2>
+				<div class="news-item">
+					<div class="news-date">2025.07.31</div>
+					<div>ホームページを公開いたしました</div>
+				</div>
+				<div class="news-item">
+					<div class="news-date">2025.07.01</div>
+					<div>合同会社BiancoRoom設立</div>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<!-- サービス紹介ページ -->
+	<div id="services" class="page">
+		<div class="container" style="padding-top: 2rem;">
+			<section class="content-section">
+				<h2 class="section-title">サービス紹介</h2>
+				<p style="text-align: center; margin-bottom: 3rem; font-size: 1.1rem;">
+					法人・個人事業主・個人向けに、幅広い映像制作サービスを提供しております
+				</p>
+
+				<div class="service-grid">
+					<!-- 法人向けSNS映像広告 -->
+					<div class="service-card">
+						<div class="service-header">
+							<h3>法人向け SNS用映像広告の制作</h3>
+							<div class="service-price">¥80,000〜</div>
+						</div>
+						<div class="service-content">
+							<div class="image-placeholder">
+								<img src="img/sns_agent.png">
+							</div>
+							<h4>基本プラン内容</h4>
+							<ul class="service-features">
+								<li>尺：〜30秒</li>
+								<li>構成・簡易絵コンテ作成</li>
+								<li>ナレーション無し</li>
+								<li>カット編集＋テロップ＋BGM</li>
+							</ul>
+
+							<div class="options-title">主なオプション</div>
+							<div class="option-item">
+								<span>撮影（交通費別）</span>
+								<span>+¥20,000</span>
+							</div>
+							<div class="option-item">
+								<span>ナレーション収録</span>
+								<span>+¥15,000〜</span>
+							</div>
+							<div class="option-item">
+								<span>モーショングラフィックス</span>
+								<span>+¥20,000〜</span>
+							</div>
+							<div class="option-item">
+								<span>SNSサイズ変換</span>
+								<span>+¥5,000/本</span>
+							</div>
+							<div class="option-item">
+								<span>修正対応（3回目以降）</span>
+								<span>+¥3,000/回</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- 個人事業主向け映像広告 -->
+					<div class="service-card">
+						<div class="service-header">
+							<h3>個人事業主向け映像広告の制作</h3>
+							<div class="service-price">¥50,000〜</div>
+						</div>
+						<div class="service-content">
+							<div class="image-placeholder">
+								<img src="img/personal_business.png">
+							</div>
+							<h4>基本プラン内容</h4>
+							<ul class="service-features">
+								<li>尺：〜30秒（45秒まで応相談）</li>
+								<li>簡易構成案（ヒアリングベース）</li>
+								<li>撮影（スマート・ライト機材で効率的に）</li>
+								<li>編集（カット＋BGM＋簡易テロップ）</li>
+							</ul>
+
+							<div class="options-title">主なオプション</div>
+							<div class="option-item">
+								<span>商品撮影用小道具レンタル</span>
+								<span>+¥5,000〜</span>
+							</div>
+							<div class="option-item">
+								<span>撮影（交通費別）</span>
+								<span>+¥20,000</span>
+							</div>
+							<div class="option-item">
+								<span>ナレーション追加（簡易）</span>
+								<span>+¥10,000</span>
+							</div>
+							<div class="option-item">
+								<span>写真スライド追加（10枚まで）</span>
+								<span>+¥3,000</span>
+							</div>
+							<div class="option-item">
+								<span>YouTube・Instagram両用編集</span>
+								<span>+¥5,000</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- 個人向け短尺動画編集 -->
+					<div class="service-card">
+						<div class="service-header">
+							<h3>個人向け短尺動画編集</h3>
+							<div class="service-price">¥2,000〜/本</div>
+						</div>
+						<div class="service-content">
+							<div class="image-placeholder">
+								<img src="img/shortVideo_editor.png">
+							</div>
+							<h4>基本プラン内容（素材提供型）</h4>
+							<ul class="service-features">
+								<li>尺：〜3分</li>
+								<li>カット編集</li>
+								<li>テロップ（簡易字幕）</li>
+								<li>効果音・BGM挿入</li>
+								<li>色調補正（簡易）</li>
+							</ul>
+
+							<div class="options-title">主なオプション</div>
+							<div class="option-item">
+								<span>動画尺追加（+3分ごと）</span>
+								<span>+¥2,000</span>
+							</div>
+							<div class="option-item">
+								<span>モーショングラフィックス（簡易）</span>
+								<span>+¥5,000</span>
+							</div>
+							<div class="option-item">
+								<span>テロップ装飾</span>
+								<span>+¥2,000</span>
+							</div>
+							<div class="option-item">
+								<span>サムネイル画像作成</span>
+								<span>+¥1,500</span>
+							</div>
+							<div class="option-item">
+								<span>ナレーション生成＋合成音声</span>
+								<span>+¥2,000</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div
+					style="background: #f8f9fa; padding: 2rem; border-radius: 10px; margin-top: 2rem; text-align: center;">
+					<h3 style="color: #2c3e50; margin-bottom: 1rem;">補足・共通事項</h3>
+					<ul style="list-style: none; text-align: left; max-width: 600px; margin: 0 auto;">
+						<li>• 価格はすべて目安。内容に応じて柔軟に調整可能。</li>
+						<li>• 初回相談・見積もり無料。</li>
+						<li>• 修正は基本2回まで無料（超過分はオプション扱い）。</li>
+						<li>• データ納品（MP4形式）／クラウド納品に対応。</li>
+					</ul>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<!-- お問い合わせページ -->
+	<div id="contact" class="page">
+		<div class="container" style="padding-top: 2rem;">
+			<section class="content-section">
+				<h2 class="section-title">お問い合わせ</h2>
+				<p style="text-align: center; margin-bottom: 3rem; font-size: 1.1rem;">
+					映像制作に関するご相談・お見積もりは、お気軽にお問い合わせください
+				</p>
+
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
+					<div>
+						<h3 style="color: #2c3e50; margin-bottom: 1.5rem;">お問い合わせフォーム</h3>
+
+
+						<!-- Formspree用（代替案） -->
+						<!-- ステータスメッセージを表示する場所 -->
+						<div id="form-status" style="margin-top: 1rem;"></div>
+
+						<form action="https://formspree.io/f/xzzvvaky" method="POST" id="formspreeForm">
+							<div class="form-group">
+								<label>お名前 <span class="required">*</span></label>
+								<input type="text" name="name" required>
+							</div>
+							<div class="form-group">
+								<label>メールアドレス <span class="required">*</span></label>
+								<input type="email" name="email" required>
+							</div>
+							<div class="form-group">
+								<label>電話番号</label>
+								<input type="tel" name="phone">
+							</div>
+							<div class="form-group">
+								<label>お問い合わせ内容 <span class="required">*</span></label>
+								<textarea name="message" required placeholder="ご相談内容、予算感、納期などをお聞かせください"></textarea>
+							</div>
+							<button type="submit" class="submit-btn">送信する</button>
+						</form>
+
+
+					</div>
+
+					<div>
+						<div class="contact-info">
+							<h3 style="color: #2c3e50; margin-bottom: 1.5rem;">直接連絡</h3>
+							<div class="contact-item">
+								<strong>電話番号</strong><br>
+								090-5946-6139
+							</div>
+							<div class="contact-item">
+								<strong>営業時間</strong><br>
+								平日 9:00-18:00
+							</div>
+							<div class="contact-item">
+								<strong>所在地</strong><br>
+								〒838-0106<br>
+								福岡県小郡市三沢62-3<br>
+								こうらハイツ103
+							</div>
+							<div style="margin-top: 2rem; padding: 1rem; background: #e3f2fd; border-radius: 5px;">
+								<strong style="color: #1976d2;">初回相談無料</strong><br>
+								まずはお気軽にご相談ください。お客様のご要望に合わせた最適なプランをご提案いたします。
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<footer>
+		<div class="container">
+			<p>&copy; 2025 合同会社 BiancoRoom. All rights reserved.</p>
+		</div>
+	</footer>
+
+	<script>
+		// ページ切り替え機能
+		function showPage(pageId) {
+			// すべてのページを非表示
+			document.querySelectorAll('.page').forEach(page => {
+				page.classList.remove('active');
+			});
+
+			// 指定されたページを表示
+			document.getElementById(pageId).classList.add('active');
+
+			// ページトップにスクロール
+			window.scrollTo(0, 0);
+		}
+
+		// フォーム送信処理（複数のサービス対応）
+		document.addEventListener('DOMContentLoaded', function () {
+			const form = document.getElementById('formspreeForm');
+			const status = document.getElementById('form-status');
+
+			form.addEventListener("submit", async function (e) {
+				e.preventDefault(); // デフォルトの遷移をキャンセル
+
+				const formData = new FormData(form);
+				const name = formData.get("name")?.trim();
+				const email = formData.get("email")?.trim();
+				const message = formData.get("message")?.trim();
+
+				// 必須チェック
+				if (!name || !email || !message) {
+					status.innerHTML = "<p style='color:red;'>必須項目をすべて入力してください。</p>";
+					return;
+				}
+
+				// メール形式チェック
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailRegex.test(email)) {
+					status.innerHTML = "<p style='color:red;'>正しいメールアドレスを入力してください。</p>";
+					return;
+				}
+
+				try {
+					const response = await fetch(form.action, {
+						method: "POST",
+						headers: {"Accept": "application/json"},
+						body: formData
+					});
+
+					if (response.ok) {
+						status.innerHTML = "<p style='color:green;'>送信が完了しました。ありがとうございました！</p>";
+						form.reset();
+					} else {
+						status.innerHTML = "<p style='color:red;'>送信に失敗しました。もう一度お試しください。</p>";
+					}
+				} catch (error) {
+					status.innerHTML = "<p style='color:red;'>通信エラーが発生しました。しばらくしてから再度お試しください。</p>";
+				}
+			});
+		});
+
+
+		// Formspree用の処理（使用する場合）
+		function switchToFormspree() {
+			document.getElementById('contactForm').style.display = 'none';
+			document.getElementById('formspreeForm').style.display = 'block';
+		}
+
+		// スムーズスクロール（ページ内リンク用）
+		document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+			anchor.addEventListener('click', function (e) {
+				e.preventDefault();
+				const target = document.querySelector(this.getAttribute('href'));
+				if (target) {
+					target.scrollIntoView({
+						behavior: 'smooth'
+					});
+				}
+			});
+		});
+
+		// 初期化
+		document.addEventListener('DOMContentLoaded', function () {
+			// 最初はホームページを表示
+			showPage('home');
+		});
+	</script>
+
+</body>
+
+</html>
